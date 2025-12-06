@@ -5,11 +5,7 @@ This repository provides the implementation and numerical tools used to evaluate
 
 The duration of inflation, quantified by the number of e-folds $N_k$ occurring between the time a given mode $k$ crosses the horizon and the end of inflation, is given by:
 
-$N_k = \int_{t}^{t_{\text{end}}} H_{k}dt$.
-
-Using the background equation $\( \dot{\phi} = d\phi/dt\)$, the integral becomes:
-
-$N_k = \int_{\phi_k}^{\phi_{\text{end}}} \frac{H(\phi)}{\dot{\phi}} d\phi .$
+$N_k = \int_{t}^{t_{\text{end}}} H_{k}dt = \int_{\phi_k}^{\phi_{\text{end}}} \frac{H(\phi)}{\dot{\phi}} d\phi .$
 
 In the slow-roll approximation one replaces $H(\phi)$ and $\dot{\phi}$ with their approximate expressions, obtaining a closed-form formula for $N_{k}$. In this repository, however, the integral is evaluated using the exact background dynamics without assuming slow-roll.
 
