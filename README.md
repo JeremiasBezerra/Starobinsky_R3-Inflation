@@ -66,7 +66,7 @@ Notes on the $R^3$ Model Implementation
 
 The implementation of the $R^3$ inflationary model is conceptually analogous to the Starobinsky case, but introduces several additional layers of complexity. The main difference is that the potential associated with the $R^3$ extension is significantly more tricky, which naturally makes both the analytic expressions and the memory-management routines more demanding.
 
-The script responsible for generating the  ${N, \phi}$ table for this model is provided in e-folds_R3.py. Unlike the Starobinsky case, the $R^3$ potential depends on an additional parameter, denoted by $\alpha$. This introduces a larger parameter space and allows for a richer phenomenology, but also increases the computational cost, since the integration must be repeated for each chosen value of $\alpha$.
+The script responsible for generating the  ${N, \phi}$ table for this model is provided in e-folds_R3.py. Unlike the Starobinsky case, the $R^3$ potential depends on an additional parameter, denoted by $\alpha$. This introduces a larger parameter space but also increases the computational cost, since the integration must be repeated for each chosen value of $\alpha$.
 
 The potential used by CLASS is defined in primordial_R3.c, where it is expressed in terms of the Taylor-series coefficients around the field value at horizon crossing. Because the underlying potential is more complicated than in the Starobinsky case, its derivatives—especially the fourth derivative $V^{(4)}$—are substantially more elaborate. Every derivative appearing in the Taylor expansion has been consistency-checked symbolically using Mathematica to ensure correctness.
 
