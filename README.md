@@ -1,4 +1,4 @@
-Starobinsky Inflation *Without Slow-Roll* Approximation
+Starobinsky (And $R^3$) Inflation *Without Slow-Roll* Approximation
 ===================================================
 
 This repository provides the implementation and numerical tools used to evaluate the inflationary dynamics of the Starobinsky (and 𝑅3) model without slow-roll approximation.
