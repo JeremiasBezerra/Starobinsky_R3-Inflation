@@ -1,7 +1,7 @@
 Starobinsky (and $R^3$) Inflation *Without Slow-Roll* Approximation
 ===================================================
 
-This repository provides the implementation and numerical tools used to evaluate the inflationary dynamics of the Starobinsky (and 𝑅3) model without slow-roll approximation.
+This repository provides the implementation and numerical tools used to evaluate the inflationary dynamics of the Starobinsky (and $𝑅^3$) model without slow-roll approximation.
 
 The duration of inflation, quantified by the number of e-folds $N_k$ occurring between the time a given mode $k$ crosses the horizon and the end of inflation, is given by:
 
