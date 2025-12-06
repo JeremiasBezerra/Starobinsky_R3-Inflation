@@ -1,4 +1,4 @@
-# Starobinsky_R3-Inlation
+# Starobinsky_R3-Inflation
 This repository provides the implementation and numerical tools used to evaluate the inflationary dynamics of the Starobinsky and 𝑅3 models within the CLASS Boltzmann code framework.
 
 The main objective is to supply the inflaton potential in CLASS using a local Taylor expansion around the field value 𝜙_* corresponding to the horizon-crossing of a given mode k. Since CLASS requires the potential and its derivatives evaluated at a single field point, the code computes the coefficients V0, V1, V2, V3 and V4, directly from the exact analytical expressions of the potentials.
