@@ -10,9 +10,9 @@ which represents the number of e-folds between horizon crossing and the end of i
 Two Python scripts included in the repository perform this calculation:
 
 Starobinsky model:
-The script solves the system (𝜙,d𝜙/dt,N) using solve_ivp, identifies the end of inflation using the Hubble slow-roll parameter \epsilon=1, and then constructs an interpolating function 𝜙(N).A table containing pairs (N,ϕ) is saved, and CLASS reads this table to determine 𝜙_* for any chosen value of N_k.
+The script solves the system (𝜙, d𝜙/dt, N) using solve_ivp, identifies the end of inflation using the Hubble slow-roll parameter ϵ=1, and then constructs an interpolating function 𝜙(N). A table containing pairs (N, ϕ) is saved, and CLASS reads this table to determine 𝜙_* for any chosen value of N_k.
 
 R3 model:
-The script follows the same procedure but evaluates the exact R3 potential and its derivative, which contain a square-root structure depending on the parameter αa. For each value of α, the script computes N(𝜙), builds the interpolator 𝜙(N,α), and exports the corresponding table.
+The script follows the same procedure but evaluates the exact R3 potential and its derivative, which contain a square-root structure depending on the parameter α. A table containing pairs (N, α, ϕ) is saved, and CLASS reads this table to determine 𝜙_* for any chosen value of N_k.
 
 Inside CLASS, the edited primordial.c reads the precomputed 𝜙_* value from the tables and substitutes it into the Taylor-expanded potential. This modular approach cleanly separates the numerical background integration (handled externally in Python) from the perturbation and primordial spectrum computation performed internally by CLASS.
