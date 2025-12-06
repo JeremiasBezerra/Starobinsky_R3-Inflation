@@ -38,11 +38,11 @@ $H^2 = \frac{8\pi}{3}\left( \frac{\pi^2}{2} + V(\phi) \right)$.
 
 Inflation ends when the Hubble slow-roll parameter reaches unity:
 
-$\epsilon_H = \frac{4\pi \pi^2}{H^2}$.
+$\epsilon = \frac{4\pi \pi^2}{H^2}$.
 
 The termination condition is therefore:
 
-$\epsilon_H = 1$.
+$\epsilon = 1$.
 
 This condition is implemented as an event function in the ODE solver, which automatically stops the integration when inflation ends. 
 
