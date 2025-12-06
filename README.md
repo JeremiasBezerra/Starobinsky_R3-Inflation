@@ -17,8 +17,7 @@ How the Starobinsky Integration Code Works
 ===================================================
 The goal of the Python script *e-folds_Starobinsky.py* is to compute the inflationary trajectory, determine the end of inflation, and extract the mapping between the number of e-folds and the inflaton value at horizon exit.
 
-The background dynamics are determined by the potential `V(phi)` and its derivative `dV(phi)`.  
-For the Starobinsky model, the potential is:
+The background dynamics are determined by the potential `V(phi)` and its derivative `dV(phi)`. For the Starobinsky model, the potential is:
 
 ```python
 def V(phi): return V0 * (1 - np.exp(-a * phi))**2
