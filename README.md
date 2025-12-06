@@ -11,8 +11,7 @@ Using the background equation $\( \dot{\phi} = d\phi/dt\)$, the integral becomes
 
 $N_k = \int_{\phi_k}^{\phi_{\text{end}}} \frac{H(\phi)}{\dot{\phi}} d\phi .$
 
-In the slow-roll approximation one replaces $H(\phi)$ and $\dot{\phi}$ with their approximate expressions, obtaining a closed-form formula for $N_{k}$.  
-In this repository, however, the integral is evaluated using the exact background dynamics without assuming slow-roll.
+In the slow-roll approximation one replaces $H(\phi)$ and $\dot{\phi}$ with their approximate expressions, obtaining a closed-form formula for $N_{k}$. In this repository, however, the integral is evaluated using the exact background dynamics without assuming slow-roll.
 
 How the Starobinsky Integration Code Works
 ===================================================
