@@ -93,5 +93,5 @@ If you use the modified CLASS modules included here, please also cite the offici
   <img src="https://logodownload.org/wp-content/uploads/2016/10/cnpq-logo-7.png" width="250">
 </p>
 <p align="center">
-  (Copyright for the logos above belongs to their respective institutions.)
+  (Copyright for the logos above belongs to their respective institutions)
 </p>
