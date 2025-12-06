@@ -22,7 +22,7 @@ def dV(phi): return 2 * a * V0 * np.exp(-a * phi) * (1 - np.exp(-a * phi))
 ```
 The evolution of inflation is computed by solving the exact system of equations:
 
-$\dot{\phi} = \pi$,
+$\dot{\phi} = \xi$,
 
 $\dot{\pi} = -3H\pi - V'(\phi)$,
 
@@ -30,11 +30,11 @@ $\dot{N} = H$,
 
 together with the Friedmann equation:
 
-$H^2 = \frac{8\pi}{3}\left( \frac{\pi^2}{2} + V(\phi) \right)$.
+$H^2 = \frac{8\pi}{3}\left( \frac{\xi^2}{2} + V(\phi) \right)$.
 
 Inflation ends when the Hubble slow-roll parameter reaches unity:
 
-$\epsilon = \frac{4\pi \pi^2}{H^2}$.
+$\epsilon = \frac{4\xi \pi^2}{H^2}$.
 
 The termination condition is therefore:
 
