@@ -1,18 +1,97 @@
-# Starobinsky_R3-Inflation
-This repository provides the implementation and numerical tools used to evaluate the inflationary dynamics of the Starobinsky and 𝑅3 models within the CLASS Boltzmann code framework.
+Starobinsky Inflation *Without Slow-Roll* Approximation
+===================================================
 
-The main objective is to supply the inflaton potential in CLASS using a local Taylor expansion around the field value 𝜙_* corresponding to the horizon-crossing of a given mode k. Since CLASS requires the potential and its derivatives evaluated at a single field point, the code computes the coefficients V0, V1, V2, V3 and V4, directly from the exact analytical expressions of the potentials.
+This repository provides the implementation and numerical tools used to evaluate the inflationary dynamics of the Starobinsky (and 𝑅3) model without slow-roll approximation.
 
-A key ingredient of both inflationary models is the determination of 𝜙_*, defined by the condition N_k = Integrate H * dt.
+The duration of inflation, quantified by the number of e-folds $N_k$ occurring between the time a given mode $k$ crosses the horizon and the end of inflation, is given by:
 
-which represents the number of e-folds between horizon crossing and the end of inflation. Although in the literature this mapping is commonly obtained through slow-roll approximations, here we avoid such assumptions and compute 𝑁(𝜙) exactly by numerically solving the full background equations.
+$N_k = \int_{t}^{t_{\text{end}}} H_{k}dt$.
 
-Two Python scripts included in the repository perform this calculation:
+Using the background equation $\( \dot{\phi} = d\phi/dt\)$, the integral becomes:
 
-Starobinsky model:
-The script solves the system (𝜙, d𝜙/dt, N) using solve_ivp, identifies the end of inflation using the Hubble slow-roll parameter ϵ=1, and then constructs an interpolating function 𝜙(N). A table containing pairs (N, ϕ) is saved, and CLASS reads this table to determine 𝜙_* for any chosen value of N_k.
+$N_k = \int_{\phi_k}^{\phi_{\text{end}}} \frac{H(\phi)}{\dot{\phi}} d\phi .$
 
-R3 model:
-The script follows the same procedure but evaluates the exact R3 potential and its derivative, which contain a square-root structure depending on the parameter α. A table containing pairs (N, α, ϕ) is saved, and CLASS reads this table to determine 𝜙_* for any chosen value of N_k.
+In the slow-roll approximation one replaces $H(\phi)$ and $\dot{\phi}$ with their approximate expressions, obtaining a closed-form formula for $N_{k}$.  
+In this repository, however, the integral is evaluated using the exact background dynamics without assuming slow-roll.
 
-Inside CLASS, the edited primordial.c reads the precomputed 𝜙_* value from the tables and substitutes it into the Taylor-expanded potential. This modular approach cleanly separates the numerical background integration (handled externally in Python) from the perturbation and primordial spectrum computation performed internally by CLASS.
+How the Starobinsky Integration Code Works
+===================================================
+The goal of the Python script *e-folds_Starobinsky.py* is to compute the inflationary trajectory, determine the end of inflation, and extract the mapping between the number of e-folds and the inflaton value at horizon exit.
+
+The background dynamics are determined by the potential `V(phi)` and its derivative `dV(phi)`.  
+For the Starobinsky model, the potential is:
+
+```python
+def V(phi): return V0 * (1 - np.exp(-a * phi))**2
+def dV(phi): return 2 * a * V0 * np.exp(-a * phi) * (1 - np.exp(-a * phi))
+#where a = \sqrt{\frac{16\pi}{3}}
+```
+The evolution of inflation is computed by solving the exact system of equations:
+
+$\dot{\phi} = \pi$,
+
+$\dot{\pi} = -3H\pi - V'(\phi)$,
+
+$\dot{N} = H$,
+
+together with the Friedmann equation:
+
+$H^2 = \frac{8\pi}{3}\left( \frac{\pi^2}{2} + V(\phi) \right)$.
+
+Inflation ends when the Hubble slow-roll parameter reaches unity:
+
+$\epsilon_H = \frac{4\pi \pi^2}{H^2}$.
+
+The termination condition is therefore:
+
+$\epsilon_H = 1$.
+
+This condition is implemented as an event function in the ODE solver, which automatically stops the integration when inflation ends. 
+
+During the numerical integration, the code continuously stores the values of the number of e-folds $N$ and the corresponding field value $\phi$ in a table. This table is populated throughout the evolution—from the initial condition $\phi_{\text{ini}}$ down to the end of inflation $\phi_{\text{end}}$.
+
+Because of this, determining the field value at horizon crossing becomes straightforward: once you provide a target number of e-folds $N_k$, the code simply looks up the corresponding value of the inflaton field $\phi_k$ from the stored table.
+
+Using the Stored Values to Interface with Boltzmann Codes
+===================================================
+
+With the values of $N$ and $\phi$ stored during the integration, it becomes possible to interface with Boltzmann codes (such as CLASS) to compute the full set of cosmological observables. The key idea is to express the inflationary potential in terms of the Taylor-series coefficients around the field value at horizon crossing.
+
+In our implementation, the potential is written directly in terms of the inflaton field in the file primordial_Starobinsky.c. In CLASS notation, the field value at horizon crossing is referred to as phi_p, which corresponds to what we denote by $\phi_k$.
+
+Users are free to modify or replace the potential function with their own implementation. Since we are solving the background dynamics without the slow-roll approximation, all that is required is to read the ${N, \phi}$ table generated by the Python integration code and extract the correct value of $\phi_k$ for the desired number of e-folds.
+
+However, due to memory allocation details and internal buffer management inside CLASS, reading this external table directly is not trivial. It requires some technical understanding of CLASS’s memory structure and cache system.
+
+For this reason, we recommend that readers inspect the file primordial_Starobinsky.c to understand how the Starobinsky potential is modeled in its simplest, hard-coded form. The more advanced implementation—responsible for reading the table, allocating memory, and handling cache operations—is located in Full_primordial_Starobinsky.c.
+
+We stress that the only difference between these two versions is that Full_primordial_Starobinsky.c includes the routines required to load the external ${N, \phi}$ table and manage the additional memory structures needed for a fully dynamic potential evaluation.
+
+Notes on the $R^3$ Model Implementation
+===================================================
+
+The implementation of the $R^3$ inflationary model is conceptually analogous to the Starobinsky case, but introduces several additional layers of complexity. The main difference is that the potential associated with the $R^3$ extension is significantly more tricky, which naturally makes both the analytic expressions and the memory-management routines more demanding.
+
+The script responsible for generating the  ${N, \phi}$ table for this model is provided in e-folds_R3.py. Unlike the Starobinsky case, the $R^3$ potential depends on an additional parameter, denoted by $\alpha$. This introduces a larger parameter space and allows for a richer phenomenology, but also increases the computational cost, since the integration must be repeated for each chosen value of $\alpha$.
+
+The potential used by CLASS is defined in primordial_R3.c, where it is expressed in terms of the Taylor-series coefficients around the field value at horizon crossing. Because the underlying potential is more complicated than in the Starobinsky case, its derivatives—especially the fourth derivative $V^{(4)}$—are substantially more elaborate. Every derivative appearing in the Taylor expansion has been consistency-checked symbolically using Mathematica to ensure correctness.
+
+As in the Starobinsky implementation, the fully dynamic version of the module is provided in Full_primordial_R3.c. This file contains the routines required to load the external ${N, \phi}$ table, along with all memory-allocation structures and cache-optimization mechanisms necessary for evaluating the potential efficiently inside CLASS. The additional complexity of the $R^3$ model makes these technical steps more involved, but the structure remains parallel to the Starobinsky implementation.
+
+How to cite us
+--------------
+
+If you use **this code**, please cite its pre-print: [arXiv:2511.06640](https://arxiv.org/abs/2511.06640).
+
+
+If you use the modified CLASS modules included here, please also cite the official CLASS papers. For reference, the CLASS code is available at [CLASS](https://github.com/lesgourg/class_public).
+
+--------------
+
+<p align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/UFRN.png" width="250" style="margin-right: 60px;">
+  <img src="https://logodownload.org/wp-content/uploads/2016/10/cnpq-logo-7.png" width="250">
+</p>
+<p align="center">
+  (Copyright for the logos above belongs to their respective institutions.)
+</p>
